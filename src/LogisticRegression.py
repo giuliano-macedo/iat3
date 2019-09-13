@@ -36,11 +36,16 @@ class LogisticRegression():
 		j=1/m * np.sum(-self.Y*np.log(H_theta) - (1-Y)*np.log(1-H_theta))
 		self.theta-=self.alpha*(self.X.T.dot(e))
 		return self.theta.reshape(self.n+1),j
+	def accuracy(self):
+		H_theta=np.divide(1,1+np.exp(-self.X.dot(self.theta)))
+		prediction= H_theta>=5
+		currect=prediction==self.Y
+		return np.sum(currect)/self.m
 def normalize_vec(X):
+
 	assert len(X.shape)==1
 	n=len(X)
 	mu=np.mean(X)
 	std_dev=np.sqrt(sum(((x-mu)**2 for x in X))/n)
 	for i in range(n):
 		X[i]=(X[i]-mu)/std_dev
-
