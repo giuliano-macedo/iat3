@@ -5,7 +5,7 @@ from LogisticRegression import LogisticRegression
 from ast import literal_eval
 from collections import namedtuple
 
-ModelEntry=namedtuple("ModelEntry",["model","errs","accrs"])
+ModelEntry=namedtuple("ModelEntry",["model","errs","accrs","j"])
 
 def interval(s):
 	global GRAPH_TITLE
@@ -38,7 +38,12 @@ for alpha in args.interval:
 		acrs[i]=model.accuracy()
 		thetao,j=next(model)
 		errs[i]=j
-	entries.append(ModelEntry(model,errs,acrs))
+	entries.append(ModelEntry(model,errs,acrs,j))
+header=";".join(["alpha","j",*(f"t{i}" for i in range(len(entries[0].model.theta)))])
+np.savetxt("results.csv", [
+	(entry.model.alpha,entry.j,*entry.model.theta)
+	for entry in entries
+], delimiter=";",header=header)
 
 xs=np.array(range(1,args.no_it+1))
 for entry in entries:
