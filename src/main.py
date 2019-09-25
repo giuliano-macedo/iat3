@@ -4,6 +4,7 @@ import argparse
 from LogisticRegression import LogisticRegression
 from ast import literal_eval
 from collections import namedtuple
+from math import ceil,log10
 
 ModelEntry=namedtuple("ModelEntry",["model","errs","accrs","j"])
 
@@ -12,8 +13,8 @@ def interval(s):
 	ans=literal_eval(s)
 	if isinstance(ans,tuple) and len(ans)==3 and all(isinstance(x, (float,int)) for x in ans):
 		a,b,c=ans
-		GRAPH_TITLE=rf'Gráfico de $J(\theta)$ para diferentes alphas que variam ${a}$ e ${b}$, passo {c}'
-		return np.arange(a,b+c,c)
+		GRAPH_TITLE=rf'Gráfico de $J(\theta)$ para diferentes alphas que variam ${a:g}$ e ${b:g}$, passo {c:g}'
+		return (float(f"{x:g}") for x in np.arange(a,b+c,c)[0:ceil((b-a)/c)+1])
 	if isinstance(ans,list) and all(isinstance(x, (float,int)) for x in ans):
 		GRAPH_TITLE=rf'Gráfico de $J(\theta)$ para os alphas {ans}'
 		return ans
